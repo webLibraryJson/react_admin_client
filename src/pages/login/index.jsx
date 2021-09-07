@@ -17,7 +17,7 @@ export default class Login extends Component {
         try{
             const response = await login(params) //请求成功的回调
             console.log(response);
-            store.set('user', { name:'Marcus' })
+            store.set('user', { name:'aiguo' })
             this.props.history.replace('/home',{username:'aiguo.cheng'})
         }catch(err){
             console.log(err);
