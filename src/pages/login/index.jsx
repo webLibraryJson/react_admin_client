@@ -1,13 +1,27 @@
 
 import React, { Component } from 'react'
 import { Form, Input, Button } from 'antd';
+import {login} from './api'
+import store from 'store'
 import './index.less'
 
 export default class Login extends Component {
     
-    onFinish = (values) => {
-        console.log('Success:', values);
-        
+    onFinish = async (values) => {
+        const {username,password} = values
+        console.log(username,password);
+        let params = {
+            username:username,
+            password:password
+        }
+        try{
+            const response = await login(params) //请求成功的回调
+            console.log(response);
+            store.set('user', { name:'Marcus' })
+            this.props.history.replace('/home',{username:'aiguo.cheng'})
+        }catch(err){
+            console.log(err);
+        }
     }
     onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
