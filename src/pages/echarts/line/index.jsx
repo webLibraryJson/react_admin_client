@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class Home extends Component {
+export default class Line extends Component {
     render() {
         return (
             <div>
-                home页面
+                折线图
             </div>
         )
     }

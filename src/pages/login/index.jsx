@@ -1,8 +1,10 @@
 
 import React, { Component } from 'react'
 import { Form, Input, Button } from 'antd';
+import {Redirect} from 'react-router-dom'
 import {login} from './api'
-import store from 'store'
+import store from '../../utils/storageUtils'
+import mymoneryUtils from '../../utils/mymoneryUtils';
 import './index.less'
 
 export default class Login extends Component {
@@ -16,9 +18,13 @@ export default class Login extends Component {
         }
         try{
             const response = await login(params) //请求成功的回调
-            console.log(response);
-            store.set('user', { name:'Marcus' })
-            this.props.history.replace('/home',{username:'aiguo.cheng'})
+            const userobj = {
+                userName:"chengaiguo",
+                userId:"001002"
+            }
+            store.setUser(userobj) //保存到localStorage中
+            mymoneryUtils.user = userobj //保存到内存中
+            this.props.history.replace('/admin',{username:'aiguo.cheng'})
         }catch(err){
             console.log(err);
         }
@@ -27,6 +33,11 @@ export default class Login extends Component {
         console.log('Failed:', errorInfo);
     };
     render() {
+        const {user} = mymoneryUtils
+        if(user && user.userId){
+            //如果有登录信息就跳转到首页
+            return <Redirect to='/admin' />
+        }
         return (
             <div className='loginBox'>
                 <div className='formbox'>

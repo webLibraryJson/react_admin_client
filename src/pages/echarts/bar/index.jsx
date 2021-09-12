@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class Home extends Component {
+export default class Echarts extends Component {
     render() {
         return (
             <div>
-                home页面
+                树状图
             </div>
         )
     }
