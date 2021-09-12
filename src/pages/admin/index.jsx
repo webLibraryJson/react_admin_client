@@ -31,7 +31,7 @@ export default class Admin extends Component {
                     <Sider><LeftNav /></Sider>
                     <Layout className="site-layout">
                         <Header className="site-layout-background" style={{ padding: 0 }}>
-                            头部
+                            头部信息
                         </Header>
                         <Breadcrumb style={{padding: 24 }}>
                             <Breadcrumb.Item>User</Breadcrumb.Item>

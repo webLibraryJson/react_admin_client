@@ -1,43 +1,78 @@
 /* 左边侧边栏导航 */
 import React, { Component } from 'react'
 import { Menu } from 'antd';
-import {Link} from 'react-router-dom'
-import {
-    DesktopOutlined,
-    UserOutlined,
-  } from '@ant-design/icons';
-  import './index.less'
+import {Link,withRouter} from 'react-router-dom'
+import './index.less'
+import menuList from '../../config/menuConfig'  
 const { SubMenu } = Menu;
-
-export default class LeftNav extends Component {
+class LeftNav extends Component {
+    getMenuList = (menuListData) =>{
+        const path = this.props.location.pathname
+        return (
+//map的方法 + 递归
+            menuListData.map(item =>{
+                // 如果没有children
+                if(!item.children){
+                    return(
+                        <Menu.Item key={item.key} icon={item.icon}>
+                            <Link to={item.key}>{item.title}</Link>
+                        </Menu.Item>
+                    )
+                }else{
+                    //判断哪个模块展开
+                    const cItem = item.children.find(citem => citem.key === path)
+                    if(cItem){
+                        this.openKey = item.key
+                    }
+                    return(
+                        <SubMenu key={item.key} icon={item.icon} title={item.title}>
+                            {this.getMenuList(item.children)}
+                        </SubMenu>
+                    )
+                }
+            })
+//reduce的方法 + 递归
+            /* menuListData.reduce((pre,item) =>{
+                // 如果没有children
+                if(!item.children){
+                    pre.push((
+                        <Menu.Item key={item.key} icon={item.icon}>
+                            <Link to={item.key}>{item.title}</Link>
+                        </Menu.Item>
+                    ))
+                }else{
+                    pre.push((
+                        <SubMenu key={item.key} title={item.title} icon={item.icon}>
+                            {this.getMenuList(item.children)}
+                        </SubMenu>
+                    ))
+                }
+                return pre
+            },[]) */
+        )
+    }
     render() {
+        this.menuNodes = this.getMenuList(menuList)
+        const path = this.props.location.pathname
+        const {openKey} = this
         return (
             <div>
                 <div className="logo">React后台管理系统</div>
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                    <Menu.Item key="1" icon={<DesktopOutlined />}>
-                        <Link to='/home'>首页</Link>
-                    </Menu.Item>
-                    <SubMenu key="sub1" icon={<UserOutlined />} title="商品">
-                        <Menu.Item key="7"><Link to='/commodity'>品类管理</Link></Menu.Item>
-                        <Menu.Item key="8"><Link to='/product'>商品管理</Link></Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="3" icon={<DesktopOutlined />}>
-                        <Link to='/user'>用户管理</Link>
-                    </Menu.Item>
-                    <Menu.Item key="4" icon={<DesktopOutlined />}>
-                        <Link to='/role'>角色管理</Link>
-                    </Menu.Item>
-                    <SubMenu key="sub2" icon={<UserOutlined />} title="图形图表">
-                        <Menu.Item key="10"><Link to='/echarts/bar'>树状图</Link></Menu.Item>
-                        <Menu.Item key="11"><Link to='/echarts/line'>折线图</Link></Menu.Item>
-                        <Menu.Item key="12"><Link to='/echarts/pie'>饼图</Link></Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="6" icon={<DesktopOutlined />}>
-                        <Link to='/order'>订单管理</Link>
-                    </Menu.Item>
+                <Menu theme="dark" 
+                selectedKeys={[path]} //当前选中的模块
+                defaultOpenKeys={[openKey]} //要展开的模块
+                mode="inline">
+                {
+                    this.menuNodes
+                }
                 </Menu>
             </div>
         )
     }
 }
+/* 
+withRouter 高阶函数
+包装非路由组件，返回一个新的组件
+新的组件向非路由组件传递3个属性：history/Location/match
+*/
+export default withRouter(LeftNav)

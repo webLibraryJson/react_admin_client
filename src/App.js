@@ -10,7 +10,8 @@ export default class App extends Component {
     return (
       <div className='appbox'>
         <Switch>
-          <Route path="/" component={Admin}></Route>
+          {/* Admin组件中是盒子布局 登录后进入的主页面 */}
+          <Route path="/" component={Admin}></Route> 
           <Route path="/login" component={Login}></Route>
           <Redirect to="/login"></Redirect>
         </Switch>
